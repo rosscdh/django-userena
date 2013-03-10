@@ -179,19 +179,26 @@ def activate(request, activation_key,
     """
     user = UserenaSignup.objects.activate_user(activation_key)
     if user:
-        # Sign the user in.
-        auth_user = authenticate(identification=user.email,
-                                 check_password=False)
-        login(request, auth_user)
+        # Sign the user in if specified
+        if userena_settings.USERENA_LOGIN_AFTER_ACTIVATION:
+            # Sign the user in.
+            auth_user = authenticate(identification=user.email,
+                                     check_password=False)
+            login(request, auth_user)
 
-        if userena_settings.USERENA_USE_MESSAGES:
-            messages.success(request, _('Your account has been activated and you have been signed in.'),
-                             fail_silently=True)
+            if userena_settings.USERENA_USE_MESSAGES:
+                messages.success(request, _('Your account has been activated and you have been signed in.'),
+                                 fail_silently=True)
+        else:
+            if userena_settings.USERENA_USE_MESSAGES:
+                messages.success(request, _('Your account has been created and will be activated shortly. Thanks for your interest'),
+                                 fail_silently=True)
 
         if success_url: redirect_to = success_url % {'username': user.username }
-        else: redirect_to = reverse('userena_profile_detail',
-                                    kwargs={'username': user.username})
+        else: redirect_to = userena_settings.USERENA_ACTIVATION_REDIRECT_URL % {'username': user.username }
+
         return redirect(redirect_to)
+
     else:
         if not extra_context: extra_context = dict()
         return ExtraContextTemplateView.as_view(template_name=template_name,

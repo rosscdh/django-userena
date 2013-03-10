@@ -38,6 +38,14 @@ USERENA_ACTIVATED = getattr(settings,
                             'USERENA_ACTIVATED',
                             'ALREADY_ACTIVATED')
 
+USERENA_LOGIN_AFTER_ACTIVATION = getattr(settings,
+                            'USERENA_LOGIN_AFTER_ACTIVATION',
+                            True)
+
+USERENA_ACTIVATION_REDIRECT_URL = getattr(settings,
+                                      'USERENA_ACTIVATION_REDIRECT_URL',
+                                      '/accounts/%(username)s/')
+
 USERENA_REMEMBER_ME_DAYS = getattr(settings,
                                    'USERENA_REMEMBER_ME_DAYS',
                                    (gettext('a month'), 30))
