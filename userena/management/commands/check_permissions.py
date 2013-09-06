@@ -3,6 +3,9 @@ from optparse import make_option
 
 from userena.models import UserenaSignup
 
+import logging
+
+
 class Command(NoArgsCommand):
     """
     For unknown reason, users can get wrong permissions.
@@ -28,17 +31,17 @@ class Command(NoArgsCommand):
         output = options.pop("output")
         test = options.pop("test")
         if test:
-            self.stdout.write(40 * ".")
-            self.stdout.write("\nChecking permission management command. Ignore output..\n\n")
+            logging.info(40 * ".")
+            logging.info("\nChecking permission management command. Ignore output..\n\n")
         if output:
             for p in permissions:
-                self.stdout.write("Added permission: %s\n" % p)
+                logging.info("Added permission: %s\n" % p)
 
             for u in users:
-                self.stdout.write("Changed permissions for user: %s\n" % u)
+                logging.info("Changed permissions for user: %s\n" % u)
 
             for w in warnings:
-                self.stdout.write("WARNING: %s\n" %w)
+                logging.info("WARNING: %s\n" %w)
 
         if test:
-            self.stdout.write("\nFinished testing permissions command.. continuing..\n")
+            logging.info("\nFinished testing permissions command.. continuing..\n")
